@@ -1,0 +1,34 @@
+version: "3"
+volumes:
+services:
+  app:
+    container_name: app
+    environment:
+     - NODE_ENV=development
+     - DEBUG=express
+    restart: always
+    build: .  
+    ports:
+      - "3000:3000"
+    command: nodemon -L index.js
+    volumes:
+      - .:/app
+    depends_on:
+      - mongo 
+  mongo:
+    container_name: mongo 
+    image: mongo 
+    environment:
+          - MONGO_DATA_DIR=/data/db
+          - MONGO_LOG_DIR=/dev/null
+          - MONGODB_USER="user" 
+          - MONGODB_PASS="pass"
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - "27017:27017"
+volumes:
+
+  mongodata:
+networks:
+  webnet:
